@@ -6,18 +6,19 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class SpotifyService {
 
-  
-  urlBusqueda:string = "https://api.spotify.com/v1/search";
+  token:string = "BQAvbjESCVpd3QuWbgS2IE_DDH3QTzNGe0oipiFDs0FNfzarYppRchN5v5ualmaaGEJaf3XQqjm-BZZvW-Q";
+  urlBusqueda: string = "https://api.spotify.com/v1/search";
+  urlArtista: string = "https://api.spotify.com/v1/artists";
 
-  constructor(private http:Http) { }
+  constructor(private http: Http) { }
 
-  getArtistas(termino:string):Observable<any[]>{
+  getArtistas(termino: string): Observable<any[]> {
 
     let headers = new Headers();
-    
-    headers.append('authorization', 'Bearer BQAPYRhxcxjTBsHlxZDpcD4_Xq-GCOzgcpKJcx-vGqAhGuk3brb3UmeOOF5X1qpqTrUdh5RMGqXg12hXGHI');
 
-    let query = `?q=${ termino }&type=artist`;
+    headers.append('authorization', 'Bearer ' + this.token);
+
+    let query = `?q=${termino}&type=artist`;
     let url = this.urlBusqueda + query;
 
     return this.http.get(url, { headers }).map(
@@ -25,5 +26,35 @@ export class SpotifyService {
     );
 
   }
+
+  getArtista(id: string): Observable<any[]> {
+
+    let headers = new Headers();
+
+    headers.append('authorization', 'Bearer ' + this.token);
+
+    let query = `/${id}`;
+    let url = this.urlArtista + query;
+
+    return this.http.get(url, { headers }).map(
+      res => res.json()
+    );
+
+  }
+
+  getTop(id: string): Observable<any[]> {
+    
+        let headers = new Headers();
+    
+        headers.append('authorization', 'Bearer ' + this.token);
+    
+        let query = `/${id}/top-tracks?country=US`;
+        let url = this.urlArtista + query;
+    
+        return this.http.get(url, { headers }).map(
+          res => res.json()
+        );
+    
+      }
 
 }
